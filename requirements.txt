@@ -1,0 +1,12 @@
+flask~=3.0.3
+python-dotenv~=1.0.1
+requests
+googletrans~=4.0.0-rc1
+pymongo
+dnspython
+mongoengine
+worldnewsapi
+openai
+langchain
+langchain-community
+asyncio
