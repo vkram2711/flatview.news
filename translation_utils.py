@@ -15,17 +15,17 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 llm = ChatOpenAI(model="gpt-4o-mini")
 
 LANGUAGES = [
-    ('ar', "Arabic"),
-    ('zh-cn', "Chinese (Simplified)"),
-    ('en', "English"),
-    ('fr', "French"),
-    ('de', "German"),
-    ('it', "Italian"),
-    ('ja', "Japanese"),
-    ('ko', "Korean"),
-    ('pt', "Portuguese"),
-    ('es', "Spanish"),
-    ('tr', "Turkish"),
+    #('ar', "Arabic"),
+    #('zh-cn', "Chinese (Simplified)"),
+    #('en', "English"),
+    #('fr', "French"),
+    #('de', "German"),
+    #('it', "Italian"),
+    #('ja', "Japanese"),
+    #('ko', "Korean"),
+    #('pt', "Portuguese"),
+    #('es', "Spanish"),
+    #('tr', "Turkish"),
     ('vi', "Vietnamese"),
     ('uk', "Ukrainian")
 ]
@@ -36,9 +36,10 @@ async def translate_to_languages(article):
     for lang, full_lang in LANGUAGES:
         tasks.append(translate_text(article.content, article.title, article.description, full_lang))
 
-    translations = await asyncio.gather(*tasks)
-    return dict(zip([lang for lang, _ in LANGUAGES], translations))
+    translations = (await llm.agenerate(tasks)).generations[0]
 
+    #translations = await asyncio.gather(*tasks)
+    return dict(zip([lang for lang, _ in LANGUAGES], [translation.text for translation in translations]))
 
 # def detect_language(article_content):
 #    # Initialize the translator
@@ -64,7 +65,7 @@ async def translate_to_languages(article):
 #    return translated.text
 
 
-async def translate_text(text, title, description, destination):
+def translate_text(text, title, description, destination):
     system_prompt = """
     Translate the article's title, description, and full content to the specified language. Ensure that the translation is accurate, professional, and has no grammar or orthographic mistakes. Format the output as JSON in the next format:
 
@@ -87,11 +88,7 @@ async def translate_text(text, title, description, destination):
 
     messages = chat_template.format_messages(language=destination, title=title, description=description_prompt, content=text)
 
-    response = await llm.agenerate([messages])
-    print(f"Original: {text}")
-    print(f"Translated: {response}")
-
-    return response
+    return messages
 
 
 async def main():
