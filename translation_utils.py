@@ -18,18 +18,18 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 llm = ChatOpenAI(model="gpt-4o-mini")
 
 LANGUAGES = [
-    #('ar', "Arabic"),
+    ('ar', "Arabic"),
     #('zh-cn', "Chinese (Simplified)"),
-    #('en', "English"),
-    #('fr', "French"),
-    #('de', "German"),
+    ('en', "English"),
+    ('fr', "French"),
+    ('de', "German"),
     #('it', "Italian"),
-    #('ja', "Japanese"),
+    ('ja', "Japanese"),
     #('ko', "Korean"),
     #('pt', "Portuguese"),
-    #('es', "Spanish"),
-    ('tr', "Turkish"),
-    ('vi', "Vietnamese"),
+    ('es', "Spanish"),
+    #('tr', "Turkish"),
+    #('vi', "Vietnamese"),
     ('uk', "Ukrainian")
 ]
 
@@ -141,9 +141,14 @@ def parse_translations(translations):
 
 
 def parse_translation(json_string):
-    if json_string.startswith("```json ") and json_string.endswith(" ```"):
-        json_string = json_string[len("```json "):-len(" ```")]
-    json_string = json_string.strip()
+    # Remove the triple backticks and the `json` keyword if present
+    if json_string.startswith("```json") and json_string.endswith("```"):
+        json_string = json_string[len("```json"):].strip()
+        json_string = json_string[:-3].strip()
+    elif json_string.startswith("```") and json_string.endswith("```"):
+        json_string = json_string[3:].strip()
+        json_string = json_string[:-3].strip()
+
     try:
         data = json.loads(json_string)
         title = data.get("title", "")
@@ -155,4 +160,5 @@ def parse_translation(json_string):
         return None, None, None
 
 
-asyncio.run(main())
+if __name__ == '__main__':
+    asyncio.run(main())

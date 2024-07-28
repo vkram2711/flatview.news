@@ -32,3 +32,5 @@ class TranslatedArticle(Document):
     description = StringField(null=True)
 
     original_article = ReferenceField(OriginalArticle)
+
+

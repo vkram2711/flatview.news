@@ -40,7 +40,6 @@ def get_latest_news(date=yesterday_date()):
 def save_latest_news(latest_news):
     if latest_news.status_code == 200:
         data = latest_news.json()
-        print(data)
 
         # Save data to the mongo db
         articles = data['top_news'][0]['news']
@@ -86,26 +85,14 @@ def save_latest_news(latest_news):
         print(f'Failed to fetch latest news:{latest_news.status_code}')
 
 
-def translate_articles():
-    articles = OriginalArticle.objects.all()
-    for article in articles:
-        titles = translate_to_languages(article.title)
-        contents = translate_to_languages(article.content)
-        descriptions = translate_to_languages(article.description)
-        print(f"Titles: {titles}")
-        print(f"Contents: {contents}")
-        print(f"Description: {descriptions}")
+def get_last_24_hours_articles():
+    today = datetime.now()
+    # 24 hours ago
+    yesterday = today - timedelta(days=1)
+    return OriginalArticle.objects(publish_date__gte=yesterday.strftime('%Y-%m-%d %H:%M:%S')).all()
 
-        for language in LANGUAGES:
-            translated = TranslatedArticle(
-                id=uuid.uuid4(),
-                title=titles[language],
-                content=titles[contents],
-                description=titles[descriptions],
-                original_article=article,
-                language=language
-            )
-            translated.save()
-            article.translations.append(translated)
-            article.save()
 
+def get_last_24_hours_articles_as_list():
+    articles = get_last_24_hours_articles()
+    articles_list = [article.to_mongo().to_dict() for article in articles]
+    return articles_list

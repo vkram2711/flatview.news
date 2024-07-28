@@ -10,3 +10,4 @@ openai
 langchain
 langchain-community
 asyncio
+flask-cors
