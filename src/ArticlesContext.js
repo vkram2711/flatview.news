@@ -4,24 +4,26 @@ export const ArticlesContext = createContext();
 
 export const ArticlesProvider = ({ children }) => {
   const [articles, setArticles] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [language, setLanguage] = useState('en');
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/top_news?language=${language}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        setArticles(data.original_articles);
-      })
-      .catch(error => console.error('Error fetching articles:', error));
+    // Fetch articles based on the current language
+    const fetchArticles = async () => {
+      setIsLoading(true);
+      const response = await fetch(`http://127.0.0.1:5000/top_news?language=${language}`);
+      const data = await response.json();
+
+      setArticles(data.original_articles);
+
+      setIsLoading(false);
+    };
+
+    fetchArticles();
   }, [language]);
 
   return (
-    <ArticlesContext.Provider value={{ articles, language, setLanguage }}>
+    <ArticlesContext.Provider value={{ articles, isLoading, language, setLanguage }}>
       {children}
     </ArticlesContext.Provider>
   );

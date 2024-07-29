@@ -1,37 +1,34 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArticlesContext } from './ArticlesContext';
 import './App.css';
+import { formatDistanceToNow } from 'date-fns';
 
 function NewsFeed() {
-  const { articles, language, setLanguage } = useContext(ArticlesContext);
+  const { articles, isLoading } = useContext(ArticlesContext);
+  const navigate = useNavigate();
 
-  const handleLanguageChange = (event) => {
-    setLanguage(event.target.value);
+  const handleClick = (index) => {
+    navigate(`/article/${articles[index]._id}`);
   };
 
   return (
-    <div className="App">
-      <header>
-        <select value={language} onChange={handleLanguageChange}>
-          <option value="ar">Arabic</option>
-          <option value="en">English</option>
-          <option value="fr">French</option>
-          <option value="de">German</option>
-          <option value="ja">Japanese</option>
-          <option value="es">Spanish</option>
-          <option value="uk">Ukrainian</option>
-        </select>
-      </header>
+    <div className="news-feed">
       <h1>News Feed</h1>
-      {articles.map((article, index) => (
-        <div key={index} className="article-summary">
-          <h2>{article.title}</h2>
-          <p>{article.description}</p>
-          <p><small>{new Date(article.publish_date).toLocaleDateString()}</small></p>
-          <Link to={`/article/${index}`}>Read more</Link>
-        </div>
-      ))}
+      {isLoading ? (
+        <div className="loading-bar">Loading...</div>
+      ) : (
+        articles.map((article, index) => (
+          <div key={index} className="article-summary" onClick={() => handleClick(index)}>
+            <img src={article.image_url} alt={article.title} className="article-image" />
+            <div className="article-details">
+              <h2>{article.title}</h2>
+              <p>{article.description}</p>
+              <p><small>{formatDistanceToNow(new Date(article.publish_date))} ago</small></p>
+            </div>
+          </div>
+        ))
+      )}
     </div>
   );
 }
