@@ -7,9 +7,6 @@ from flask_cors import CORS
 from mongo.models import OriginalArticle, TranslatedArticle, Source
 from mongo.mongo_utils import load_mongo
 
-
-
-
 load_mongo()
 
 from flask import Flask
@@ -20,6 +17,7 @@ CORS(app)
 
 
 from flask import request
+
 
 @app.route('/top_news')
 def top_news():
@@ -34,14 +32,9 @@ def top_news():
             return article
 
         if 'translations' in article and article['translations']:
-            translations_dict = {}
-            for trans_id in article['translations']:
-                translation = TranslatedArticle.objects.get(id=trans_id).to_mongo().to_dict()
-                translations_dict[translation['language']] = translation
-            article['translations'] = translations_dict
-
-            if language in translations_dict:
-                translation = translations_dict[language]
+            translation = TranslatedArticle.objects(original_article=article['_id'], language=language).first()
+            if translation:
+                translation = translation.to_mongo().to_dict()
                 article['title'] = translation['title']
                 article['description'] = translation['description']
                 article['content'] = translation['content']

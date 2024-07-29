@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 import requests
 
 from mongo.models import Source, OriginalArticle, TranslatedArticle
-from translation_utils import translate_to_languages, LANGUAGES
 
 NEWS_API_KEY = os.environ.get('NEWS_API_KEY')
 

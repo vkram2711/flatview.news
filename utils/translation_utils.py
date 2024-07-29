@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import re
 import time
 import uuid
 from json import JSONDecodeError
@@ -10,6 +11,7 @@ from langchain_community.chat_models import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 
 from mongo.models import OriginalArticle, TranslatedArticle
+from utils import json_utils
 
 # Set up OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -64,8 +66,13 @@ async def translate_articles_to_languages(articles):
 async def translate_to_languages(article):
     tasks = []
     translated_langs = []
+
+    existent_translations = []
+    for existent_translation in article.translations:
+        existent_translations.append(TranslatedArticle.objects(id=existent_translation.id).first().language)
+
     for lang, full_lang in LANGUAGES:
-        if article.language != lang:
+        if article.language != lang and lang not in existent_translations:
             tasks.append(translate_text(article.content, article.title, article.description, full_lang))
             translated_langs.append(lang)
 
@@ -138,11 +145,12 @@ def parse_translations(translations):
     translated_articles = {}
     for lang, translation in translations.items():
         title, description, content = parse_translation(translation)
-        translated_articles[lang] = (title, description, content)
+        if title and description and content:
+            translated_articles[lang] = (title, description, content)
     return translated_articles
 
 
-def parse_translation(json_string):
+def parse_translation(json_string, retry=False):
     # Remove the triple backticks and the `json` keyword if present
     if json_string.startswith("```json") and json_string.endswith("```"):
         json_string = json_string[len("```json"):].strip()
@@ -159,8 +167,13 @@ def parse_translation(json_string):
         return title, description, content
     except JSONDecodeError as e:
         print("Failed to parse JSON:", json_string, f"with error: {e}")
+        if not retry:
+            json_string = json_utils.escape_unescaped_quotes(json_string)
+            parse_translation(json_string, retry=True)
+
         return None, None, None
 
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    #asyncio.run(main())
+    pass
