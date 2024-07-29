@@ -23,8 +23,6 @@ from flask import request
 @app.route('/top_news')
 def top_news():
     language = request.args.get('language', 'en')
-
-    start_time = time.time()
     pipeline = [
         {
             '$lookup': {
@@ -76,12 +74,36 @@ def top_news():
         translation = article['translations']
         article['title'] = translation['title']
         article['description'] = translation['description']
-        article['content'] = translation['content']
         article.pop('translations', None)
+        article.pop('content', None)
 
     return json.dumps({
         'original_articles': original_articles,
     }, default=str)
+
+
+@app.route('/article/<article_id>')
+def get_article_by_id(article_id):
+    language = request.args.get('language', 'en')
+    article = OriginalArticle.objects(id=article_id).first()
+    if article:
+        source = Source.objects(id=article.source.id).first()
+        article = article.to_mongo().to_dict()
+        article["source"] = source.to_mongo().to_dict()
+        if language != article["language"]:
+            translation = TranslatedArticle.objects(original_article=article["_id"], language=language).first()
+            if translation:
+                article["title"] = translation.title
+                article["description"] = translation.description
+                article["content"] = translation.content
+            else:
+                article["title"] = "Translation not available"
+                article["description"] = "Translation not available"
+                article["content"] = "Translation not available"
+        return json.dumps(article, default=str)
+    else:
+        return json.dumps({'error': 'Article not found'}), 404
+
 
 if __name__ == '__main__':
     app.run()
