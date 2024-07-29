@@ -15,7 +15,7 @@ from mongo.models import OriginalArticle, TranslatedArticle
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Initialize the OpenAI LLM
-llm = ChatOpenAI(model="gpt-4o-mini")
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
 
 LANGUAGES = [
     ('ar', "Arabic"),
@@ -63,12 +63,14 @@ async def translate_articles_to_languages(articles):
 
 async def translate_to_languages(article):
     tasks = []
+    translated_langs = []
     for lang, full_lang in LANGUAGES:
         if article.language != lang:
             tasks.append(translate_text(article.content, article.title, article.description, full_lang))
+            translated_langs.append(lang)
 
     translations = (await llm.agenerate(tasks)).generations
-    return dict(zip([lang for lang, _ in LANGUAGES], [translation[0].text for translation in translations]))
+    return dict(zip(translated_langs, [translation[0].text for translation in translations]))
 
 # def detect_language(article_content):
 #    # Initialize the translator

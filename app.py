@@ -19,6 +19,8 @@ app = Flask(__name__)
 CORS(app)
 
 
+from flask import request
+
 @app.route('/top_news')
 def top_news():
     def embed_source(article):
@@ -27,15 +29,38 @@ def top_news():
             article['source'] = source.to_mongo().to_dict()
         return article
 
-    original_articles = OriginalArticle.objects.all()
-    translated_articles = TranslatedArticle.objects.all()
+    def embed_translations(article, language):
+        if article['language'] == language:
+            return article
 
-    original_articles_json = [embed_source(article.to_mongo().to_dict()) for article in original_articles]
-    translated_articles_json = [embed_source(article.to_mongo().to_dict()) for article in translated_articles]
+        if 'translations' in article and article['translations']:
+            translations_dict = {}
+            for trans_id in article['translations']:
+                translation = TranslatedArticle.objects.get(id=trans_id).to_mongo().to_dict()
+                translations_dict[translation['language']] = translation
+            article['translations'] = translations_dict
+
+            if language in translations_dict:
+                translation = translations_dict[language]
+                article['title'] = translation['title']
+                article['description'] = translation['description']
+                article['content'] = translation['content']
+                return article
+        return None
+
+    language = request.args.get('language', 'en')
+    original_articles = OriginalArticle.objects.order_by('-publish_date').all()
+
+    original_articles_json = [
+        embed_translations(embed_source(article.to_mongo().to_dict()), language)
+        for article in original_articles
+    ]
+
+    # Filter out None values
+    original_articles_json = [article for article in original_articles_json if article]
 
     return json.dumps({
         'original_articles': original_articles_json,
-        'translated_articles': translated_articles_json
     }, default=str)
 
 

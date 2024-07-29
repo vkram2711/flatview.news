@@ -21,7 +21,7 @@ def yesterday_date():
     return yesterday.strftime('%Y-%m-%d')
 
 
-def get_latest_news(date=yesterday_date()):
+def get_latest_news(country='us', language='en', date=yesterday_date()):
     # with worldnewsapi.ApiClient(configuration) as api_client:
     #    # Create an instance of the API class
     #    api_instance = worldnewsapi.NewsApi(api_client)
@@ -33,7 +33,7 @@ def get_latest_news(date=yesterday_date()):
     # url = f'https://newsdata.io/api/1/latest?apikey={NEWS_API_KEY}'
     # print(url)
 
-    url = f'https://api.worldnewsapi.com/top-news?api-key={NEWS_API_KEY}&source-country=us&language=en'
+    url = f'https://api.worldnewsapi.com/top-news?api-key={NEWS_API_KEY}&source-country={country}&language={language}'
     return requests.get(url)
 
 
@@ -51,36 +51,38 @@ def save_latest_news(latest_news):
             #     icon=article_data.get('source_icon', None),
             #     creator=article_data.get('creator', None)
             # )
+            try:
+                source = Source(
+                    url=article_data.get('url'),
+                    name=article_data.get('source_name', None),
+                    icon=article_data.get('source_icon', None),
+                    creator=article_data.get('author', None)
+                )
+                source.save()
 
-            source = Source(
-                url=article_data.get('url'),
-                name=article_data.get('source_name', None),
-                icon=article_data.get('source_icon', None),
-                creator=article_data.get('author', None)
-            )
-            source.save()
+                # article = OriginalArticle(
+                #     id=article_data.get('article_id'),
+                #     language=article_data.get('language', 'en'),
+                #     title=article_data.get('title'),
+                #     content=article_data.get('content'),
+                #     description=article_data.get('description', None),
+                #     image_url=article_data.get('image_url', None),
+                #     source=source
+                # )
 
-            # article = OriginalArticle(
-            #     id=article_data.get('article_id'),
-            #     language=article_data.get('language', 'en'),
-            #     title=article_data.get('title'),
-            #     content=article_data.get('content'),
-            #     description=article_data.get('description', None),
-            #     image_url=article_data.get('image_url', None),
-            #     source=source
-            # )
-
-            article = OriginalArticle(
-                id=str(article_data.get('id')),
-                language=article_data.get('language', 'en'),
-                title=article_data.get('title'),
-                content=article_data.get('text'),
-                description=article_data.get('summary', None),
-                image_url=article_data.get('image', None),
-                source=source,
-                publish_date=article_data.get('publish_date')
-            )
-            article.save()
+                article = OriginalArticle(
+                    id=str(article_data.get('id')),
+                    language=article_data.get('language', 'en'),
+                    title=article_data.get('title'),
+                    content=article_data.get('text'),
+                    description=article_data.get('summary', None),
+                    image_url=article_data.get('image', None),
+                    source=source,
+                    publish_date=article_data.get('publish_date')
+                )
+                article.save()
+            except Exception as e:
+                print(f'Failed to save article: {article_data} \n\n Error: {e}')
     else:
         print(f'Failed to fetch latest news:{latest_news.status_code}')
 
