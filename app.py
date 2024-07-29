@@ -1,4 +1,5 @@
 import json
+import time
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -21,41 +22,66 @@ from flask import request
 
 @app.route('/top_news')
 def top_news():
-    def embed_source(article):
-        if 'source' in article and article['source']:
-            source = Source.objects.get(id=article['source'])
-            article['source'] = source.to_mongo().to_dict()
-        return article
-
-    def embed_translations(article, language):
-        if article['language'] == language:
-            return article
-
-        if 'translations' in article and article['translations']:
-            translation = TranslatedArticle.objects(original_article=article['_id'], language=language).first()
-            if translation:
-                translation = translation.to_mongo().to_dict()
-                article['title'] = translation['title']
-                article['description'] = translation['description']
-                article['content'] = translation['content']
-                return article
-        return None
-
     language = request.args.get('language', 'en')
-    original_articles = OriginalArticle.objects.order_by('-publish_date').all()
 
-    original_articles_json = [
-        embed_translations(embed_source(article.to_mongo().to_dict()), language)
-        for article in original_articles
+    start_time = time.time()
+    pipeline = [
+        {
+            '$lookup': {
+                'from': 'source',
+                'localField': 'source',
+                'foreignField': '_id',
+                'as': 'source'
+            }
+        },
+        {
+            '$unwind': {
+                'path': '$source',
+                'preserveNullAndEmptyArrays': True
+            }
+        },
+        {
+            '$lookup': {
+                'from': 'translated_article',
+                'let': {'article_id': '$_id'},
+                'pipeline': [
+                    {
+                        '$match': {
+                            '$expr': {
+                                '$and': [
+                                    {'$eq': ['$original_article', '$$article_id']},
+                                    {'$eq': ['$language', language]}
+                                ]
+                            }
+                        }
+                    }
+                ],
+                'as': 'translations'
+            }
+        },
+        {
+            '$unwind': {
+                'path': '$translations',
+                'preserveNullAndEmptyArrays': False
+            }
+        },
+        {
+            '$sort': {'publish_date': -1}
+        }
     ]
 
-    # Filter out None values
-    original_articles_json = [article for article in original_articles_json if article]
+    original_articles = list(OriginalArticle.objects.aggregate(pipeline))
+
+    for article in original_articles:
+        translation = article['translations']
+        article['title'] = translation['title']
+        article['description'] = translation['description']
+        article['content'] = translation['content']
+        article.pop('translations', None)
 
     return json.dumps({
-        'original_articles': original_articles_json,
+        'original_articles': original_articles,
     }, default=str)
-
 
 if __name__ == '__main__':
     app.run()
