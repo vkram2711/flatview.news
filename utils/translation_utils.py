@@ -169,7 +169,7 @@ def parse_translation(json_string, retry=False):
         print("Failed to parse JSON:", json_string, f"with error: {e}")
         if not retry:
             json_string = json_utils.escape_unescaped_quotes(json_string)
-            parse_translation(json_string, retry=True)
+            return parse_translation(json_string, retry=True)
 
         return None, None, None
 

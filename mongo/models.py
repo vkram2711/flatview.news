@@ -13,7 +13,7 @@ class OriginalArticle(Document):
     language = StringField(required=True)
 
     title = StringField(required=True)
-    content = StringField(required=True)
+    content = StringField(null=True)
     description = StringField(null=True)
     country = StringField(null=True)
 
@@ -24,13 +24,12 @@ class OriginalArticle(Document):
     translations = ListField(ReferenceField('TranslatedArticle'))
 
 
-
 class TranslatedArticle(Document):
     id = UUIDField(primary_key=True)
     language = StringField(required=True)
 
     title = StringField(required=True)
-    content = StringField(required=True)
+    content = StringField(null=True)
     description = StringField(null=True)
 
     original_article = ReferenceField(OriginalArticle)
