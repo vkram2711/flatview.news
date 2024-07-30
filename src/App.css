@@ -175,3 +175,11 @@ h1 {
 .article-source-info a:hover {
   text-decoration: underline; /* Underline on hover */
 }
+
+.article-source {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 0.9em;
+  color: #999;
+}
