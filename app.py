@@ -126,4 +126,4 @@ def get_article_by_id(article_id):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
