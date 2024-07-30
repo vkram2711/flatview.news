@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {HashRouter,  Route, Routes} from 'react-router-dom';
 import NewsFeed from './NewsFeed';
 import Article from './Article';
 import CustomDropdown from './CustomDropdown';
@@ -9,7 +9,7 @@ import './App.css';
 function App() {
   return (
     <ArticlesProvider>
-      <Router>
+      <HashRouter>
         <div className="App">
           <header>
             <CustomDropdown />
@@ -19,7 +19,7 @@ function App() {
             <Route path="/article/:id" element={<Article />} />
           </Routes>
         </div>
-      </Router>
+      </HashRouter>
     </ArticlesProvider>
   );
 }
