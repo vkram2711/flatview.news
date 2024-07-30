@@ -58,9 +58,28 @@ def top_news():
             }
         },
         {
+            '$addFields': {
+                'translations': {
+                    '$cond': {
+                        'if': {'$eq': ['$language', language]},
+                        'then': [],
+                        'else': '$translations'
+                    }
+                }
+            }
+        },
+        {
+            '$match': {
+                '$or': [
+                    {'language': {'$eq': language}},
+                    {'translations': {'$ne': []}}
+                ]
+            }
+        },
+        {
             '$unwind': {
                 'path': '$translations',
-                'preserveNullAndEmptyArrays': False
+                'preserveNullAndEmptyArrays': True
             }
         },
         {
@@ -71,11 +90,12 @@ def top_news():
     original_articles = list(OriginalArticle.objects.aggregate(pipeline))
 
     for article in original_articles:
-        translation = article['translations']
-        article['title'] = translation['title']
-        article['description'] = translation['description']
-        article.pop('translations', None)
-        article.pop('content', None)
+        if 'translations' in article:
+            translation = article['translations']
+            article['title'] = translation['title']
+            article['description'] = translation['description']
+            article.pop('translations', None)
+            article.pop('content', None)
 
     return json.dumps({
         'original_articles': original_articles,
