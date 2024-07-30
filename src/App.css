@@ -183,3 +183,11 @@ h1 {
   font-size: 0.9em;
   color: #999;
 }
+
+/* src/App.css */
+.source-icon {
+  width: 24px; /* Increased width */
+  height: 24px; /* Increased height */
+  margin-right: 5px;
+  vertical-align: middle;
+}

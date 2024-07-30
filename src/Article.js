@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import { ArticlesContext } from './ArticlesContext';
 import './App.css';
 import { formatDistanceToNow } from 'date-fns';
-import { extractDomain } from './utils';
-import {API_BASE_URL} from "./config";
+import { extractDomain, capitalizeFirstLetter } from './utils';
+import { API_BASE_URL } from './config';
 
 function Article() {
   const { id } = useParams();
@@ -39,9 +39,20 @@ function Article() {
     <div className="article-content">
       <h1>{article.title}</h1>
       <p><small>{formatDistanceToNow(new Date(article.publish_date))} ago</small></p>
+      {article.country && <p><small>Country: {capitalizeFirstLetter(article.country)}</small></p>}
+      {article.creator && <p><small>Author: {article.creator}</small></p>}
       <img src={article.image_url} alt={article.title} />
       <div className="article-source-info">
-        <p>Source: <a href={article.source.url} target="_blank" rel="noopener noreferrer">{sourceName}</a></p>
+        <div className="source-card">
+          <p>
+            {article.source.icon && (
+              <img src={article.source.icon} alt={sourceName} className="source-icon" />
+            )}
+            <a href={article.source.url} target="_blank" rel="noopener noreferrer">{sourceName}</a>
+          </p>
+          {article.country && <p>Country: {capitalizeFirstLetter(article.country)}</p>}
+          {article.creator && <p>Author: {article.creator}</p>}
+        </div>
       </div>
       <p>{article.content}</p>
     </div>
