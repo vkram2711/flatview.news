@@ -13,7 +13,7 @@ load_mongo()
 
 
 if __name__ == '__main__':
-    latest_news = get_latest_news(country='fr', language='fr')
+    latest_news = get_latest_news(country='us', language='en')
     print(latest_news.json())
     #save_latest_news(latest_news)
     articles = get_last_24_hours_articles()
