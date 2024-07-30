@@ -5,7 +5,7 @@ export const ArticlesContext = createContext();
 export const ArticlesProvider = ({ children }) => {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [language, setLanguage] = useState('en');
+  const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
 
   useEffect(() => {
     // Fetch articles based on the current language
@@ -20,6 +20,10 @@ export const ArticlesProvider = ({ children }) => {
     };
 
     fetchArticles();
+  }, [language]);
+
+  useEffect(() => {
+    localStorage.setItem('language', language);
   }, [language]);
 
   return (

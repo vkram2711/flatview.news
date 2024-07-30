@@ -1,8 +1,10 @@
+// src/NewsFeed.js
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArticlesContext } from './ArticlesContext';
 import './App.css';
 import { formatDistanceToNow } from 'date-fns';
+import { extractDomain } from './utils';
 
 function NewsFeed() {
   const { articles, isLoading } = useContext(ArticlesContext);
@@ -12,6 +14,7 @@ function NewsFeed() {
     navigate(`/article/${articles[index]._id}`);
   };
 
+
   return (
     <div className="news-feed">
       <h1>News Feed</h1>
@@ -19,14 +22,16 @@ function NewsFeed() {
         <div className="loading-bar">Loading...</div>
       ) : (
         articles.map((article, index) => (
-          <div key={index} className="article-summary" onClick={() => handleClick(index)}>
-            <img src={article.image_url} alt={article.title} className="article-image" />
-            <div className="article-details">
-              <h2>{article.title}</h2>
-              <p>{article.description}</p>
-              <p><small>{formatDistanceToNow(new Date(article.publish_date))} ago</small></p>
+            <div key={index} className="article-summary" onClick={() => handleClick(index)}>
+              <img src={article.image_url} alt={article.title} className="article-image"/>
+              <div className="article-details">
+                <h2>{article.title}</h2>
+                <p>{article.description}</p>
+                <p><small>{formatDistanceToNow(new Date(article.publish_date))} ago</small></p>
+              </div>
+              <div className="article-source">{extractDomain(article.source.url)}</div>
+
             </div>
-          </div>
         ))
       )}
     </div>

@@ -60,6 +60,8 @@ h1 {
   margin: 20px 0;
   padding: 0;
   text-align: left;
+  cursor: pointer;
+  position: relative; /* Add this line */
 }
 
 .article-image {
@@ -94,13 +96,15 @@ h1 {
   color: #007bff;
   text-decoration: none;
 }
+
 .article-summary {
   display: flex;
   align-items: center;
   margin: 20px 0;
   padding: 0;
   text-align: left;
-  cursor: pointer; /* Make the entire item clickable */
+  cursor: pointer;
+  position: relative; /* Ensure the parent is positioned */
 }
 
 .article-summary:hover {
@@ -111,9 +115,17 @@ h1 {
   background: #fff;
   border: 1px solid #ccc;
   margin: 20px auto;
-  padding: 20px;
+  padding: 40px; /* Increased padding */
   max-width: 800px;
   text-align: left;
+  line-height: 1.8; /* Increased line height for readability */
+}
+
+.article-content p {
+  color: #666;
+  line-height: 1.8; /* Increased line height for readability */
+  margin: 10px 0;
+  text-indent: 2em; /* Indentation at the start of paragraphs */
 }
 
 .article-content h1 {
@@ -122,11 +134,6 @@ h1 {
   margin-bottom: 10px;
 }
 
-.article-content p {
-  color: #666;
-  line-height: 1.6;
-  margin: 10px 0;
-}
 
 .article-content img {
   max-width: 100%;
@@ -144,3 +151,27 @@ h1 {
   margin: 20px 0;
 }
 
+/* Add this to your App.css or a relevant CSS file */
+.article-source-info {
+  background-color: #f9f9f9; /* Slightly contrasting background color */
+  border: 1px solid #ddd; /* Light border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 16px; /* Padding inside the card */
+  margin-top: 16px; /* Space above the card */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.article-source-info p {
+  margin: 0; /* Remove default margin */
+  font-size: 14px; /* Slightly smaller font size */
+  color: #333; /* Darker text color for contrast */
+}
+
+.article-source-info a {
+  color: #007bff; /* Link color */
+  text-decoration: none; /* Remove underline from links */
+}
+
+.article-source-info a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
