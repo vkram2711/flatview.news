@@ -4,11 +4,10 @@ import time
 
 from dotenv import load_dotenv
 
-import notion_utils
 
 load_dotenv()
 from flask_cors import CORS
-
+import notion_utils
 from mongo.models import OriginalArticle, TranslatedArticle, Source
 from mongo.mongo_utils import load_mongo
 

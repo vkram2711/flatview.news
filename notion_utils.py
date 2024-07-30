@@ -1,3 +1,4 @@
+import os
 import uuid
 
 import requests
@@ -6,7 +7,7 @@ from datetime import datetime
 
 # Define the Notion API endpoint and headers
 NOTION_API_URL = "https://api.notion.com/v1/pages"
-NOTION_API_KEY = "secret_PmaWMk9oENUXiLzyyPZoOrH4g4HritdJTETkCdEfqDv"
+NOTION_API_KEY = os.getenv("NOTION_API_KEY")
 DATABASE_ID = "24144319c6ba4ee888838d571d96f9e8"
 
 headers = {
