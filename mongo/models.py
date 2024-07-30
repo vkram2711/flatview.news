@@ -15,12 +15,14 @@ class OriginalArticle(Document):
     title = StringField(required=True)
     content = StringField(required=True)
     description = StringField(null=True)
+    country = StringField(null=True)
 
     image_url = URLField(null=True)
 
     publish_date = StringField()
     source=ReferenceField(Source)
     translations = ListField(ReferenceField('TranslatedArticle'))
+
 
 
 class TranslatedArticle(Document):

@@ -3,6 +3,9 @@ import os
 import time
 
 from dotenv import load_dotenv
+
+import notion_utils
+
 load_dotenv()
 from flask_cors import CORS
 
@@ -124,6 +127,16 @@ def get_article_by_id(article_id):
         return json.dumps(article, default=str)
     else:
         return json.dumps({'error': 'Article not found'}), 404
+
+
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    feedback = request.json.get('feedback', '')
+    rating = request.json.get('rating')
+    contact = request.json.get('contact', '')
+
+    notion_utils.add_entry_to_notion(feedback, contact, rating)
+    return "Feedback submitted successfully"
 
 
 if __name__ == '__main__':

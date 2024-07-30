@@ -21,18 +21,11 @@ def yesterday_date():
 
 
 def get_latest_news(country='us', language='en', date=yesterday_date()):
-    # with worldnewsapi.ApiClient(configuration) as api_client:
-    #    # Create an instance of the API class
-    #    api_instance = worldnewsapi.NewsApi(api_client)
-    #    api_response = api_instance.top_news()
-    #    print(ap)
-    #    return api_response
+    excluded_countries = ','.join([f'!{country}' for country in exclude_countries])
+    url = f'https://newsdata.io/api/1/latest?apikey={NEWS_API_KEY}'
+    print(url)
 
-    # excluded_countries = ','.join([f'!{country}' for country in exclude_countries])
-    # url = f'https://newsdata.io/api/1/latest?apikey={NEWS_API_KEY}'
-    # print(url)
-
-    url = f'https://api.worldnewsapi.com/top-news?api-key={NEWS_API_KEY}&source-country={country}&language={language}'
+    # url = f'https://api.worldnewsapi.com/top-news?api-key={NEWS_API_KEY}&source-country={country}&language={language}'
     return requests.get(url)
 
 
@@ -41,44 +34,58 @@ def save_latest_news(latest_news):
         data = latest_news.json()
 
         # Save data to the mongo db
-        articles = data['top_news'][0]['news']
+        #articles = data['top_news'][0]['news']
+        articles = data['results']
         for article_data in articles:
             print(article_data)
-            # source = Source(
-            #     url=article_data.get('source_url'),
-            #     name=article_data.get('source_name', None),
-            #     icon=article_data.get('source_icon', None),
-            #     creator=article_data.get('creator', None)
-            # )
+
             try:
+                #source = Source(
+                #    url=article_data.get('url'),
+                #    name=article_data.get('source_name', None),
+                #    icon=article_data.get('source_icon', None),
+                #    creator=article_data.get('author', None)
+                #)
+                if article_data.get('creator', None):
+                    creator = article_data.get('creator')[0]
+                else:
+                    creator = None
+
+                if article_data.get('country', None):
+                    country = article_data.get('country')[0]
+                else:
+                    country = None
+
                 source = Source(
-                    url=article_data.get('url'),
-                    name=article_data.get('source_name', None),
+                    url=article_data.get('link'),
+                    name=article_data.get('source_id', None),
                     icon=article_data.get('source_icon', None),
-                    creator=article_data.get('author', None)
+                    creator=creator
                 )
                 source.save()
 
-                # article = OriginalArticle(
-                #     id=article_data.get('article_id'),
-                #     language=article_data.get('language', 'en'),
-                #     title=article_data.get('title'),
-                #     content=article_data.get('content'),
-                #     description=article_data.get('description', None),
-                #     image_url=article_data.get('image_url', None),
-                #     source=source
-                # )
-
                 article = OriginalArticle(
-                    id=str(article_data.get('id')),
+                    id=article_data.get('article_id'),
                     language=article_data.get('language', 'en'),
                     title=article_data.get('title'),
-                    content=article_data.get('text'),
-                    description=article_data.get('summary', None),
-                    image_url=article_data.get('image', None),
+                    content=article_data.get('content'),
+                    description=article_data.get('description', None),
+                    image_url=article_data.get('image_url', None),
                     source=source,
-                    publish_date=article_data.get('publish_date')
+                    publish_date=article_data.get('pubDate'),
+                    country=country
                 )
+
+                #article = OriginalArticle(
+                #    id=str(article_data.get('id')),
+                #    language=article_data.get('language', 'en'),
+                #    title=article_data.get('title'),
+                #    content=article_data.get('text'),
+                #    description=article_data.get('summary', None),
+                #    image_url=article_data.get('image', None),
+                #    source=source,
+                #    publish_date=article_data.get('publish_date')
+                #)
                 article.save()
             except Exception as e:
                 print(f'Failed to save article: {article_data} \n\n Error: {e}')
