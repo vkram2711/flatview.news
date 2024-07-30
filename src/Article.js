@@ -5,6 +5,7 @@ import { ArticlesContext } from './ArticlesContext';
 import './App.css';
 import { formatDistanceToNow } from 'date-fns';
 import { extractDomain } from './utils';
+import {API_BASE_URL} from "./config";
 
 function Article() {
   const { id } = useParams();
@@ -15,7 +16,7 @@ function Article() {
   useEffect(() => {
     const fetchArticle = async () => {
       setIsLoading(true);
-      const response = await fetch(`http://127.0.0.1:5000/article/${id}?language=${language}`);
+      const response = await fetch(`${API_BASE_URL}/article/${id}?language=${language}`);
       const data = await response.json();
       setArticle(data);
       setIsLoading(false);

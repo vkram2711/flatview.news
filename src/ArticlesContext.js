@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
+import {API_BASE_URL} from "./config";
 
 export const ArticlesContext = createContext();
 
@@ -11,7 +12,7 @@ export const ArticlesProvider = ({ children }) => {
     // Fetch articles based on the current language
     const fetchArticles = async () => {
       setIsLoading(true);
-      const response = await fetch(`http://127.0.0.1:5000/top_news?language=${language}`);
+      const response = await fetch(`${API_BASE_URL}/top_news?language=${language}`);
       const data = await response.json();
 
       setArticles(data.original_articles);
