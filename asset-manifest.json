@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/news-frontend/static/css/main.f89d48b3.css",
-    "main.js": "/news-frontend/static/js/main.74932143.js",
-    "static/js/453.6c3fffb1.chunk.js": "/news-frontend/static/js/453.6c3fffb1.chunk.js",
-    "index.html": "/news-frontend/index.html",
-    "main.f89d48b3.css.map": "/news-frontend/static/css/main.f89d48b3.css.map",
-    "main.74932143.js.map": "/news-frontend/static/js/main.74932143.js.map",
-    "453.6c3fffb1.chunk.js.map": "/news-frontend/static/js/453.6c3fffb1.chunk.js.map"
+    "main.css": "/flatview.news/static/css/main.f89d48b3.css",
+    "main.js": "/flatview.news/static/js/main.51799181.js",
+    "static/js/453.6c3fffb1.chunk.js": "/flatview.news/static/js/453.6c3fffb1.chunk.js",
+    "index.html": "/flatview.news/index.html",
+    "main.f89d48b3.css.map": "/flatview.news/static/css/main.f89d48b3.css.map",
+    "main.51799181.js.map": "/flatview.news/static/js/main.51799181.js.map",
+    "453.6c3fffb1.chunk.js.map": "/flatview.news/static/js/453.6c3fffb1.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f89d48b3.css",
-    "static/js/main.74932143.js"
+    "static/js/main.51799181.js"
   ]
 }
