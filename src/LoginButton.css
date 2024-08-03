@@ -1,0 +1,22 @@
+/* src/LoginButton.css */
+.login-button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #6c757d; /* Neutral color */
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: #5a6268; /* Slightly darker neutral color */
+}
+
+.user-avatar {
+  cursor: pointer;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}

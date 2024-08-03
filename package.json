@@ -2,8 +2,11 @@
   "name": "news",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://vkram2711.github.io/news-frontend",
+  "homepage": "https://vkram2711.github.io/flatview.news",
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
+    "@stripe/react-stripe-js": "^2.7.3",
+    "@stripe/stripe-js": "^4.1.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
