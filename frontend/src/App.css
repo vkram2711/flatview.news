@@ -1,0 +1,193 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.App {
+  text-align: center;
+}
+
+header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 20px; /* Restore padding around the language selector */
+}
+
+header select {
+  padding: 5px 10px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+header select:hover {
+  border-color: #007bff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  font-size: 2em;
+  margin: 20px 0;
+}
+
+.news-feed {
+  padding: 0 20px; /* Restore horizontal padding */
+}
+
+.article-summary {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  position: relative; /* Add this line */
+}
+
+.article-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.article-details {
+  flex: 1;
+}
+
+.article-summary h2 {
+  margin: 0 0 10px;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.article-summary p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.article-summary small {
+  color: #999;
+}
+
+.article-summary a {
+  display: inline-block;
+  margin-top: 10px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.article-summary {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  position: relative; /* Ensure the parent is positioned */
+}
+
+.article-summary:hover {
+  background-color: #f0f0f0; /* Optional: Add a hover effect */
+}
+
+.article-content {
+  background: #fff;
+  border: 1px solid #ccc;
+  margin: 20px auto;
+  padding: 40px; /* Increased padding */
+  max-width: 800px;
+  text-align: left;
+  line-height: 1.8; /* Increased line height for readability */
+}
+
+.article-content p {
+  color: #666;
+  line-height: 1.8; /* Increased line height for readability */
+  margin: 10px 0;
+  text-indent: 2em; /* Indentation at the start of paragraphs */
+}
+
+.article-content h1 {
+  font-size: 2em;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+
+.article-content img {
+  max-width: 100%;
+  margin: 20px 0;
+}
+
+.article-content small {
+  color: #999;
+}
+
+.loading-bar {
+  font-size: 1.5em;
+  color: #007bff;
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* Add this to your App.css or a relevant CSS file */
+.article-source-info {
+  background-color: #f9f9f9; /* Slightly contrasting background color */
+  border: 1px solid #ddd; /* Light border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 16px; /* Padding inside the card */
+  margin-top: 16px; /* Space above the card */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.article-source-info p {
+  margin: 0; /* Remove default margin */
+  font-size: 14px; /* Slightly smaller font size */
+  color: #333; /* Darker text color for contrast */
+}
+
+.article-source-info a {
+  color: #007bff; /* Link color */
+  text-decoration: none; /* Remove underline from links */
+}
+
+.article-source-info a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+.article-source {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 0.9em;
+  color: #999;
+}
+
+/* src/App.css */
+.source-icon {
+  width: 24px; /* Increased width */
+  height: 24px; /* Increased height */
+  margin-right: 5px;
+  vertical-align: middle;
+}
