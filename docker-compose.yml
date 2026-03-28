@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL:-http://localhost:5000}
+        - REACT_APP_AUTH0_DOMAIN=${REACT_APP_AUTH0_DOMAIN}
+        - REACT_APP_AUTH0_CLIENT_ID=${REACT_APP_AUTH0_CLIENT_ID}
+        - REACT_APP_STRIPE_PUBLISHABLE_KEY=${REACT_APP_STRIPE_PUBLISHABLE_KEY}
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

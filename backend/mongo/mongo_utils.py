@@ -4,12 +4,7 @@ from mongoengine import connect
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-MONGO_DB_USERNAME = os.getenv('MONGO_DB_USERNAME')
-MONGO_DB_PASSWORD = os.getenv('MONGO_DB_PASSWORD')
-MONGO_DB_CLUSTER = os.getenv('MONGO_DB_CLUSTER')
-MONGO_DB_NAME = os.getenv('MONGO_DB_NAME')
-
-uri = f"mongodb+srv://{MONGO_DB_USERNAME}:{MONGO_DB_PASSWORD}@{MONGO_DB_CLUSTER}.hfggwmb.mongodb.net/?retryWrites=true&w=majority&appName={MONGO_DB_NAME}"
+uri = os.getenv('MONGO_URI')
 
 
 # Create a new client and connect to the server

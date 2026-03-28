@@ -1,4 +1,4 @@
 // src/stripeConfig.js
 import { loadStripe } from '@stripe/stripe-js';
 
-export const stripePromise = loadStripe('your-publishable-key-here');
+export const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);

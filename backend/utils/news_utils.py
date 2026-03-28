@@ -36,7 +36,6 @@ def yesterday_date():
 def get_latest_news():
     excluded_countries = ','.join([f'!{country}' for country in exclude_countries])
     url = f'https://gnews.io/api/v4/top-headlines?category=general&apikey={NEWS_API_KEY}'
-    print(url)
     return requests.get(url)
 
 

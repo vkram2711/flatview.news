@@ -12,7 +12,6 @@ import FeedbackForm from './FeedbackForm';
 import LoginButton from './LoginButton';
 import Profile from './Profile';
 import './App.css';
-import authConfig from './auth_config.json';
 import CheckoutForm from "./CheckoutForm";
 
 function App() {
@@ -24,8 +23,8 @@ function App() {
 
   return (
     <Auth0Provider
-      domain={authConfig.domain}
-      clientId={authConfig.clientId}
+      domain={process.env.REACT_APP_AUTH0_DOMAIN}
+      clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
       authorizationParams={{
         redirect_uri: window.location.origin
       }}
