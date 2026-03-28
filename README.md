@@ -2,6 +2,10 @@
 
 A web app that uses LLMs to translate news from foreign sources that may be underreported by your national media. Read global news in Arabic, English, French, German, Japanese, Spanish, or Ukrainian — all translated on the fly by GPT-4o-mini.
 
+## Preview
+
+![photo_2026-03-29_03-07-20](https://github.com/user-attachments/assets/b52e4e4c-4b8a-4a42-a154-6831234abae4)
+
 ## How it works
 
 1. **News ingestion** — articles are fetched from [GNews](https://gnews.io/) and full content is extracted via [WorldNewsAPI](https://worldnewsapi.com/).
